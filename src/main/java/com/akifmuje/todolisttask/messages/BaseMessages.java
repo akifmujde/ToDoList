@@ -1,6 +1,5 @@
 package com.akifmuje.todolisttask.messages;
 
-import com.akifmuje.todolisttask.dto.responses.BaseResponse;
 import com.akifmuje.todolisttask.models.ToDoItem;
 import com.akifmuje.todolisttask.models.ToDoList;
 import com.akifmuje.todolisttask.models.User;
@@ -113,6 +112,5 @@ public class BaseMessages {
         }
 
     }
-
 
 }

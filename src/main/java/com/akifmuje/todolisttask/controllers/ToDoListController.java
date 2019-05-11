@@ -41,7 +41,7 @@ public class ToDoListController {
     @Autowired
     private ModelMapper modelMapper;
 
-    // 1) Create To Do List by User
+    // 1) Create To Do List by User (Create)
     @RequestMapping(value = "/createlist", method = RequestMethod.POST)
     public @ResponseBody CreateToDoListResponse createToDoList(@RequestBody CreateToDoListRequest createToDoListRequest){
         User user = null;
@@ -64,7 +64,7 @@ public class ToDoListController {
     }
 
 
-    // 2) List all of user's to do list
+    // 2) List all of user's to do list (Read)
     @RequestMapping(value = "",method = RequestMethod.POST)
     public @ResponseBody GetToDoListResponse getLists(@RequestBody GetToDoListRequest getToDoListRequest){
 
@@ -101,7 +101,7 @@ public class ToDoListController {
     }
 
 
-    // 3) Delete users's to do list
+    // 3) Delete users's to do list (Delete)
     @RequestMapping(value = "/deletelist", method = RequestMethod.POST)
     public @ResponseBody DeleteToDoListResponse deleteList(@RequestBody DeleteToDoListRequest deleteToDoListRequest){
 

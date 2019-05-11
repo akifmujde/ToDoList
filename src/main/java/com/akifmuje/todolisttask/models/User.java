@@ -1,6 +1,5 @@
 package com.akifmuje.todolisttask.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +18,14 @@ import java.util.Set;
         @NamedQuery(
                 name = "User.getUserFromToken",
                 query = "select u from User u where u.token =:token"
+        ),
+        @NamedQuery(
+                name = "User.getUserFromRequest",
+                query = "select u from User u where u.mail =:mail and u.password =:password"
+        ),
+        @NamedQuery(
+                name = "User.updateUserToken",
+                query = "update User u set u.token =:token where u.id =:user_id"
         )
 })
 

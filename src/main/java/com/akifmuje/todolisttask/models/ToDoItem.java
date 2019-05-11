@@ -10,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "todoItem")
+
 @NamedQueries({
         @NamedQuery(
                 name = "ToDoItem.getToDoItemFromId",
@@ -25,14 +26,9 @@ import java.util.Set;
         ),
         @NamedQuery(
                 name = "ToDoItem.updateStatus",
-                query = "update ToDoItem item set item.status.id =:status_id, item.updated_date =:updated_date"
-        ),
-        @NamedQuery(
-                name="ToDoItem.orderToDoItem",
-                query = "select * from ToDoItem td where td.todoList.id = ?1 order by ?2 ?3"
+                query = "update ToDoItem item set item.status.id =:status_id, item.updated_date =:updated_date where item.id =:todo_item_id"
         )
 })
-
 @Data
 @NoArgsConstructor
 public class ToDoItem extends BaseEntity{
@@ -51,12 +47,11 @@ public class ToDoItem extends BaseEntity{
     @JoinColumn
     private Status status;
 
-    @ManyToMany
-    @JoinTable(
-            name = "dependent_items",
-            joinColumns = @JoinColumn(name = "still_waiting_id"),
-            inverseJoinColumns = @JoinColumn(name = "tobe_completed_id"))
-    Set<ToDoItem> toDoItemSet;
+    @OneToMany(mappedBy = "tobeCompleted")
+    Set<DependencyItem> tobeCompleted;
+
+    @OneToMany(mappedBy = "stillWaiting")
+    Set<DependencyItem> stillWaiting;
 
     public ToDoItem(String name, String description, Date deadline,ToDoList toDoList, Status status){
 

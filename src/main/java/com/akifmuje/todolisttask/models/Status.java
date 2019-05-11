@@ -2,7 +2,6 @@ package com.akifmuje.todolisttask.models;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 
 import javax.persistence.*;
 import java.util.Date;

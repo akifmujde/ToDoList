@@ -6,9 +6,4 @@ public class BaseResponse {
     public String message;
 
     public BaseResponse(){}
-
-    public BaseResponse(String message, boolean result){
-        this.result = result;
-        this.message = message;
-    }
 }

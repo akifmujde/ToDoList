@@ -3,13 +3,8 @@ package com.akifmuje.todolisttask.services;
 import com.akifmuje.todolisttask.models.ToDoItem;
 import com.akifmuje.todolisttask.repositores.ToDoItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -24,10 +19,9 @@ public class ToDoItemService implements IToDoItemService{
     public List<ToDoItem> getToDoItemFromId(int todo_item_id) { return repository.getToDoItemFromId(todo_item_id); }
 
     @Override
-    public List<ToDoItem> orderToDoItem(int id, String column_name, String order_type) {
-        return repository.orderToDoItem(id,column_name,order_type);
+    public List<ToDoItem> filterItem(int list_id, int status_id, String name) {
+        return repository.filterItem(list_id,status_id,name);
     }
-
 
     @Transactional
     @Override
@@ -41,7 +35,9 @@ public class ToDoItemService implements IToDoItemService{
 
     @Transactional
     @Override
-    public void updateStatus(int status_id, Date updated_date) { repository.updateStatus(status_id,updated_date);}
+    public void updateStatus(int status_id, Date updated_date, int todo_item_id) {
+        repository.updateStatus(status_id,updated_date,todo_item_id);
+    }
 
     @Override
     public void save(ToDoItem model) {
