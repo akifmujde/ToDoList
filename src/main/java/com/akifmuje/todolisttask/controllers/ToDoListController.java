@@ -20,6 +20,7 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/todolist")
 public class ToDoListController {
 

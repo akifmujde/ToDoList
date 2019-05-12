@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/todolist/todoitem")
 public class ToDoItemController {
 

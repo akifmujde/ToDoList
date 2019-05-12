@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Random;
 
 @RestController
+@CrossOrigin
 public class UserController {
 
     @Autowired
