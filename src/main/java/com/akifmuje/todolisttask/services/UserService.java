@@ -4,6 +4,8 @@ package com.akifmuje.todolisttask.services;
 import com.akifmuje.todolisttask.models.User;
 import com.akifmuje.todolisttask.repositores.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,10 +18,10 @@ public class UserService implements IUserService {
     private UserRepository repository;
 
     @Override
-    public List<User> getIdCountFromToken(String token){
+    public List<User> findUserFromMail(String mail){
 
-        List<User> userCount = repository.getIdCountFromToken(token);
-        return userCount;
+        List<User> users = repository.findUserFromMail(mail);
+        return users;
     }
 
     @Override

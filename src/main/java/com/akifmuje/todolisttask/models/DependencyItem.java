@@ -19,12 +19,20 @@ import javax.persistence.*;
                         "di.tobeCompleted.id =:tobe_completed_id "
         ),
         @NamedQuery(
-                name = "DependencyItem.deleteDependencies",
+                name = "DependencyItem.deleteItemDependencies",
                 query = "delete from DependencyItem di " +
                         "where " +
-                        "di.stillWaiting.id in :still_waiting_ids " +
+                        "di.stillWaiting.id =:item_id " +
                         "or " +
-                        "di.tobeCompleted.id in :tobe_completed_ids "
+                        "di.tobeCompleted.id =:item_id "
+        ),
+        @NamedQuery(
+                name = "DependencyItem.deleteListDependencies",
+                query = "delete from DependencyItem di " +
+                        "where " +
+                        "di.stillWaiting.id in (select i.id from ToDoItem i where i.todoList.id =:list_id) " +
+                        "or " +
+                        "di.tobeCompleted.id in (select i.id from ToDoItem i where i.todoList.id =:list_id) "
         ),
         @NamedQuery(
                 name = "DependencyItem.checkDependency",
@@ -34,7 +42,16 @@ import javax.persistence.*;
                         "or" +
                         "(di.stillWaiting.id =:still_waiting_id and di.tobeCompleted.id =:tobe_completed_id) " + // user not add a existing dependency
                         "or" +
-                        "(di.stillWaiting.id =:still_waiting_id and di.tobeCompleted.id =:still_waiting_id)" // user not add a self dependency
+                        "(di.stillWaiting.id =:still_waiting_id and di.tobeCompleted.id =:still_waiting_id) " // user not add a self dependency
+
+        ),
+        @NamedQuery(
+                name = "DependencyItem.checkMarkCondition",
+                query = "select di from DependencyItem di " +
+                        "inner join ToDoItem i on di.tobeCompleted.id = i.id " +
+                        "inner join  Status s on i.status.id = s.id " +
+                        "where di.stillWaiting.id =:still_waiting_id " +
+                        " and s.id = 2"
         )
 })
 public class DependencyItem {

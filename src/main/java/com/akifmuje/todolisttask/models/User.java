@@ -12,8 +12,8 @@ import java.util.Set;
 @Table(name = "user")
 @NamedQueries({
         @NamedQuery(
-                name = "User.getIdCountFromToken",
-                query = "select count(u.id) from User u where u.token =:token"
+                name = "User.findUserFromMail",
+                query = "select u from User u where u.mail =:mail"
         ),
         @NamedQuery(
                 name = "User.getUserFromToken",

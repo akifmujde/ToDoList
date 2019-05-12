@@ -11,10 +11,7 @@ import com.akifmuje.todolisttask.models.ToDoItem;
 import com.akifmuje.todolisttask.models.ToDoList;
 import com.akifmuje.todolisttask.models.User;
 import com.akifmuje.todolisttask.dto.requests.CreateToDoListRequest;
-import com.akifmuje.todolisttask.services.IStatusService;
-import com.akifmuje.todolisttask.services.IToDoItemService;
-import com.akifmuje.todolisttask.services.IToDoListService;
-import com.akifmuje.todolisttask.services.IUserService;
+import com.akifmuje.todolisttask.services.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +36,7 @@ public class ToDoListController {
     IStatusService statusService;
 
     @Autowired
-    private ModelMapper modelMapper;
+    IDependencyItemService dependencyItemService;
 
     // 1) Create To Do List by User (Create)
     @RequestMapping(value = "/createlist", method = RequestMethod.POST)
@@ -116,6 +113,7 @@ public class ToDoListController {
 
         if(baseMessages.result == true){
 
+            dependencyItemService.deleteListDependencies(deleteToDoListRequest.list_id);
             toDoItemService.deleteListItems(toDoList.getId());
             toDoListService.deleteToDoList(deleteToDoListRequest.list_id);
 

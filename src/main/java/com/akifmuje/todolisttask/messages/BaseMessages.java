@@ -1,5 +1,6 @@
 package com.akifmuje.todolisttask.messages;
 
+import com.akifmuje.todolisttask.dto.requests.RegistrationRequest;
 import com.akifmuje.todolisttask.models.ToDoItem;
 import com.akifmuje.todolisttask.models.ToDoList;
 import com.akifmuje.todolisttask.models.User;
@@ -29,11 +30,18 @@ public class BaseMessages {
             //2
             "List item is not found.",
             //3
-            "User permission error."
+            "User permission error.",
+            //4
+            "User name is cannot be null.",
+            //5
+            "User mail is cannot be null.",
+            //6
+            "User password is cannot be null."
     };
 
     public BaseMessages(){ }
 
+    // User list confirmation
     public BaseMessages(User user, ToDoList toDoList){
 
         // Login Confirmation
@@ -73,6 +81,8 @@ public class BaseMessages {
         }
     }
 
+
+    // User list item confirmation
     public BaseMessages(User user, ToDoItem toDoItem){
 
         // Login Confirmation
@@ -113,4 +123,44 @@ public class BaseMessages {
 
     }
 
+
+    // User params confirmation
+    public BaseMessages(RegistrationRequest registrationRequest){
+
+        // User name confirmation
+        if (registrationRequest.name != ""){
+
+            // User mail confirmation
+            if (registrationRequest.mail != ""){
+
+                // User password confirmation
+                if ( registrationRequest.password != ""){
+
+                    result = true;
+                    message = "";
+                }
+
+                //User password is cannot be null
+                else {
+
+                    result = false;
+                    message = messages[6];
+                }
+            }
+
+            // User mail is cannot be null
+            else {
+
+                result = false;
+                message = messages[5];
+            }
+        }
+
+        // User name is cannot be null.
+        else {
+
+            result = false;
+            message = messages[4];
+        }
+    }
 }

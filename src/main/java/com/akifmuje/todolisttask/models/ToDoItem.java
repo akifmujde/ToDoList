@@ -27,6 +27,18 @@ import java.util.Set;
         @NamedQuery(
                 name = "ToDoItem.updateStatus",
                 query = "update ToDoItem item set item.status.id =:status_id, item.updated_date =:updated_date where item.id =:todo_item_id"
+        ),
+        @NamedQuery(
+                name = "ToDoItem.getNotDependencyItems",
+                query = "select item from ToDoItem item " +
+                        "inner join ToDoList li on item.todoList.id = li.id " +
+                        "inner join User u on li.user.id = u.id " +
+                        "where item.id <> :still_waiting_id " +
+                        "and " +
+                        "item.id not in (" +
+                            "select di.tobeCompleted.id from DependencyItem di " +
+                            "where di.stillWaiting.id =:still_waiting_id" +
+                        ")"
         )
 })
 @Data

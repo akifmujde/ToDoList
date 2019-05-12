@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer> {
 
-    List<User> getIdCountFromToken(@Param("token") String token);
+    List<User> findUserFromMail(@Param("mail") String mail);
     List<User> getUserFromToken(@Param("token") String token);
     List<User> getUserFromRequest(@Param("mail") String mail, @Param("password") String password);
 

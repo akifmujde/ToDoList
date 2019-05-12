@@ -18,9 +18,7 @@ public class BaseEntity {
     @NotNull
     private String name;
 
-    @Temporal(TemporalType.DATE)
     private Date created_date;
 
-    @Temporal(TemporalType.DATE)
     private Date updated_date;
 }

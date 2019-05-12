@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class ToDoItem extends BaseEntity {
 
+    public int id;
     public String name;
     public String description;
     public Date deadline;

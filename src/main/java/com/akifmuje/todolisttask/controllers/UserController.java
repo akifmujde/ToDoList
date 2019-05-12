@@ -1,9 +1,13 @@
 package com.akifmuje.todolisttask.controllers;
 
 import com.akifmuje.todolisttask.dto.requests.LoginRequest;
+import com.akifmuje.todolisttask.dto.requests.RegistrationRequest;
 import com.akifmuje.todolisttask.dto.responses.LoginResponse;
+import com.akifmuje.todolisttask.dto.responses.RegistrationResponse;
+import com.akifmuje.todolisttask.messages.BaseMessages;
 import com.akifmuje.todolisttask.models.User;
 import com.akifmuje.todolisttask.services.IUserService;
+import com.akifmuje.todolisttask.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,5 +71,44 @@ public class UserController {
     }
 
     @RequestMapping(value = "/registration",method = RequestMethod.POST)
-    public @ResponseBody
+    public @ResponseBody RegistrationResponse userRegistration(@RequestBody RegistrationRequest registrationRequest){
+
+        User user;
+        String token;
+
+        BaseMessages baseMessages = new BaseMessages(registrationRequest);
+        RegistrationResponse registrationResponse = new RegistrationResponse();
+        user = userService.findUserFromMail(registrationRequest.mail).stream().findFirst().orElse(null);
+
+        if (baseMessages.result == true){
+            // if this mail address not have a any user
+            if(user == null){
+
+                token = token_Generator();
+
+                userService.createUser(new User(
+                        registrationRequest.name,
+                        registrationRequest.mail,
+                        registrationRequest.password,
+                        token
+                ));
+
+                registrationResponse.token = token;
+                registrationResponse.result = true;
+                registrationResponse.message = "User was successfully created.";
+            }
+            else {
+
+                registrationResponse.result = false;
+                registrationResponse.message = "This mail address already exist.";
+            }
+        }
+        else {
+
+            registrationResponse.result = baseMessages.result;
+            registrationResponse.message = baseMessages.message;
+        }
+
+        return registrationResponse;
+    }
 }

@@ -12,10 +12,15 @@ import java.util.List;
 public interface DependencyItemRepository extends JpaRepository<DependencyItem,Integer> {
 
     @Modifying
-    void deleteDependencies(@Param("still_waiting_id") int still_waiting_id,@Param("tobe_completed_id") int tobe_completed_id);
+    void deleteListDependencies(@Param("list_id") int list_id);
+
+    @Modifying
+    void deleteItemDependencies(@Param("item_id") int item_id);
 
     @Modifying
     void deleteDependency(@Param("still_waiting_id") int still_waiting_id,@Param("tobe_completed_id") int tobe_completed_id);
 
     List<DependencyItem> checkDependency(@Param("still_waiting_id") int still_waiting_id, @Param("tobe_completed_id") int tobe_completed_id);
+
+    List<DependencyItem> checkMarkCondition(@Param("still_waiting_id") int still_waiting_id);
 }

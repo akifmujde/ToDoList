@@ -14,11 +14,11 @@ import java.util.List;
 @Repository
 public interface ToDoItemRepository extends JpaRepository<ToDoItem,Integer>{
 
-    String QUERY = "select item from ToDoItem item where " +
+    String filterItem = "select item from ToDoItem item where " +
             "item.todoList.id = ?1 and " +
             "item.status.id = ?2 and " +
             "item.name like CONCAT('%',CONCAT(?3, '%'))";
-    @Query(value = QUERY)
+    @Query(value = filterItem)
     List<ToDoItem> filterItem(int list_id, int status_id, String name);
 
     @Modifying
@@ -32,5 +32,6 @@ public interface ToDoItemRepository extends JpaRepository<ToDoItem,Integer>{
 
     List<ToDoItem> getToDoItemFromId(@Param("todo_item_id") int todo_item_id);
 
+    List<ToDoItem> getNotDependencyItems(@Param("still_waiting_id") int still_waiting_id);
 
 }
