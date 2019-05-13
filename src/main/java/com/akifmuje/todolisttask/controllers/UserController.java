@@ -1,7 +1,9 @@
 package com.akifmuje.todolisttask.controllers;
 
+import com.akifmuje.todolisttask.dto.requests.ExitRequest;
 import com.akifmuje.todolisttask.dto.requests.LoginRequest;
 import com.akifmuje.todolisttask.dto.requests.RegistrationRequest;
+import com.akifmuje.todolisttask.dto.responses.ExitResponse;
 import com.akifmuje.todolisttask.dto.responses.LoginResponse;
 import com.akifmuje.todolisttask.dto.responses.RegistrationResponse;
 import com.akifmuje.todolisttask.messages.BaseMessages;
@@ -111,5 +113,34 @@ public class UserController {
         }
 
         return registrationResponse;
+    }
+
+    @RequestMapping(value = "/exit", method = RequestMethod.POST)
+    public @ResponseBody ExitResponse userExit(@RequestBody ExitRequest exitRequest){
+
+        User user;
+        ExitResponse exitResponse = new ExitResponse();
+
+        if (exitRequest.token != "" && exitRequest.token != null ){
+            user = userService.getUserFromToken(exitRequest.token).stream().findFirst().orElse(null);
+
+            if(user != null){
+
+                userService.updateUserToken("",user.getId());
+                exitResponse.result = true;
+                exitResponse.message = "User is successfully existed";
+            }
+            else {
+                exitResponse.result = false;
+                exitResponse.message = "User not found!";
+            }
+        }
+        else {
+            exitResponse.result = false;
+            exitResponse.message = "Token is null!";
+        }
+
+
+        return exitResponse;
     }
 }
