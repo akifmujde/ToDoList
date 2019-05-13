@@ -142,7 +142,7 @@ public class UserController {
                 exitResponse.message = "User is successfully existed";
             }
             else {
-                exitResponse.result = false;
+                exitResponse.result = true;
                 exitResponse.message = "User not found!";
             }
         }

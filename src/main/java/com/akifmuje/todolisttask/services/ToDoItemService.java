@@ -33,6 +33,11 @@ public class ToDoItemService implements IToDoItemService{
         return repository.getToDoItemsFromList_Id(list_id);
     }
 
+    @Override
+    public List<ToDoItem> gelAllDependenciesOfItem(int still_waiting_id) {
+        return repository.gelAllDependenciesOfItem(still_waiting_id);
+    }
+
     @Transactional
     @Override
     public void deleteItem(int id) { repository.deleteItem(id);}

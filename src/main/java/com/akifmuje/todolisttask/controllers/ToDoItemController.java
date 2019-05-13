@@ -226,7 +226,7 @@ public class ToDoItemController {
     }
 
 
-    // 6) Show list of can be added dependency items
+    // 6) Show lis
     @RequestMapping(value = "showdependencies",method = RequestMethod.POST)
     public @ResponseBody ShowDependencyItemsResponse showDependencyItems(@RequestBody ShowDependencyItemsRequest showDependencyItemsRequest){
 
@@ -352,4 +352,47 @@ public class ToDoItemController {
 
         return listOfToDoItemResponse;
     }
+
+    // 9) List all dependencies of to do item
+    @RequestMapping(value = "/alldepencenciesitem",method = RequestMethod.POST)
+    public @ResponseBody AllDependenciesItemResponse allDependencies(@RequestBody AllDependenciesItemRequest allDependenciesItemRequest){
+
+        User user;
+        AllDependenciesItemResponse allDependenciesItemResponse = new AllDependenciesItemResponse();
+        ToDoItem toDoItem;
+
+        user = userService.getUserFromToken(allDependenciesItemRequest.token).stream().findFirst().orElse(null);
+        toDoItem = toDoItemService.getToDoItemFromId(allDependenciesItemRequest.todo_item_id).stream().findFirst().orElse(null);
+        BaseMessages baseMessages = new BaseMessages(user,toDoItem);
+
+        if (baseMessages.result == true){
+
+            List<ToDoItem> items= toDoItemService.gelAllDependenciesOfItem(allDependenciesItemRequest.todo_item_id);
+            for (ToDoItem i : items) {
+                com.akifmuje.todolisttask.dto.models.ToDoItem dto = new com.akifmuje.todolisttask.dto.models.ToDoItem();
+
+                dto.id = i.getId();
+                dto.name = i.getName();
+                dto.description = i.getDescription();
+                dto.created_date = i.getCreated_date();
+                dto.updated_date = i.getUpdated_date();
+                dto.deadline = i.getDeadline();
+                dto.list_id = i.getTodoList().getId();
+                dto.status_id = i.getStatus().getId();
+
+                allDependenciesItemResponse.toDoItems.add(dto);
+            }
+
+            allDependenciesItemResponse.result = true;
+            allDependenciesItemResponse.message= "Dependency items was successfully listed.";
+            allDependenciesItemResponse.list_name = toDoItem.getTodoList().getName();
+        }
+        else {
+            allDependenciesItemResponse.result = false;
+            allDependenciesItemResponse.message= baseMessages.message;
+        }
+
+        return allDependenciesItemResponse;
+    }
+
 }

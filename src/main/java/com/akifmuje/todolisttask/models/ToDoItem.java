@@ -38,11 +38,18 @@ import java.util.Set;
                         "item.id not in (" +
                             "select di.tobeCompleted.id from DependencyItem di " +
                             "where di.stillWaiting.id =:still_waiting_id" +
-                        ")"
+                        ") and " +
+                        "item.status.id = 2"
         ),
         @NamedQuery(
                 name = "ToDoItem.getToDoItemsFromList_Id",
                 query = "select i from ToDoItem i where i.todoList.id =:list_id"
+        ),
+        @NamedQuery(
+                name = "ToDoItem.gelAllDependenciesOfItem",
+                query = "select item from ToDoItem item " +
+                        "inner join DependencyItem di on item.id = di.tobeCompleted.id" +
+                        " where di.stillWaiting.id = :still_waiting_id "
         )
 })
 @Data
@@ -53,6 +60,7 @@ public class ToDoItem extends BaseEntity{
 
     @NotNull
     @Temporal(TemporalType.DATE)
+
     private Date deadline;
 
     @ManyToOne

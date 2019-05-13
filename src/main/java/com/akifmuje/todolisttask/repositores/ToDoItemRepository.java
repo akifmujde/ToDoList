@@ -36,4 +36,6 @@ public interface ToDoItemRepository extends JpaRepository<ToDoItem,Integer>{
 
     List<ToDoItem> getToDoItemsFromList_Id(@Param("list_id") int list_id);
 
+    List<ToDoItem> gelAllDependenciesOfItem(@Param("still_waiting_id") int still_waiting_id);
+
 }
