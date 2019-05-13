@@ -306,4 +306,50 @@ public class ToDoItemController {
 
         return deleteDependencyResponse;
     }
+
+    // 8) List all list items
+    @RequestMapping(value = "listoftodoitem",method = RequestMethod.POST)
+    public @ResponseBody ListOfToDoItemResponse listToDoItem(@RequestBody ListOfToDoItemRequest listOfToDoItemRequest){
+
+        User user;
+        ListOfToDoItemResponse listOfToDoItemResponse = new ListOfToDoItemResponse();
+        List<ToDoItem> toDoItem;
+        ToDoList toDoList;
+
+        user = userService.getUserFromToken(listOfToDoItemRequest.token).stream().findFirst().orElse(null);
+        toDoList = toDoListService.getListFromId(listOfToDoItemRequest.list_id).stream().findFirst().orElse(null);
+
+        BaseMessages baseMessages = new BaseMessages(user,toDoList);
+
+        if (baseMessages.result==true){
+            toDoItem = toDoItemService.getToDoItemsFromList_Id(listOfToDoItemRequest.list_id);
+
+            for (ToDoItem i: toDoItem) {
+
+                com.akifmuje.todolisttask.dto.models.ToDoItem dto = new com.akifmuje.todolisttask.dto.models.ToDoItem();
+
+                dto.id = i.getId();
+                dto.description = i.getDescription();
+                dto.name = i.getName();
+                dto.deadline = i.getDeadline();
+                dto.created_date = i.getCreated_date();
+                dto.updated_date = i.getUpdated_date();
+                dto.list_id = i.getTodoList().getId();
+                dto.status_id = i.getStatus().getId();
+
+                listOfToDoItemResponse.todoitems.add(dto);
+
+            }
+
+            listOfToDoItemResponse.list_name = toDoList.getName();
+            listOfToDoItemResponse.message = "List item was successfully listed.";
+        }
+        else {
+            listOfToDoItemResponse.message = baseMessages.message;
+        }
+
+        listOfToDoItemResponse.result = baseMessages.result;
+
+        return listOfToDoItemResponse;
+    }
 }

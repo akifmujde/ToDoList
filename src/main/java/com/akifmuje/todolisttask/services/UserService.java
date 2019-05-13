@@ -32,8 +32,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<User> getUserFromRequest(String mail, String password) {
-        return repository.getUserFromRequest(mail,password);
+    public List<User> getUserFromRequest(String mail) {
+        return repository.getUserFromRequest(mail);
     }
 
     @Override
@@ -45,5 +45,11 @@ public class UserService implements IUserService {
     @Override
     public void updateUserToken(String token, int user_id) {
         repository.updateUserToken(token,user_id);
+    }
+
+    @Transactional
+    @Override
+    public void deleteUserFromMail(String mail) {
+        repository.deleteUserFromMail(mail);
     }
 }

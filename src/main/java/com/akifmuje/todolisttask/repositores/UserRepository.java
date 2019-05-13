@@ -14,9 +14,12 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 
     List<User> findUserFromMail(@Param("mail") String mail);
     List<User> getUserFromToken(@Param("token") String token);
-    List<User> getUserFromRequest(@Param("mail") String mail, @Param("password") String password);
+    List<User> getUserFromRequest(@Param("mail") String mail);
 
 
     @Modifying
     void updateUserToken(@Param("token") String token,@Param("user_id") int user_id);
+
+    @Modifying
+    void deleteUserFromMail(@Param("mail") String mail);
 }

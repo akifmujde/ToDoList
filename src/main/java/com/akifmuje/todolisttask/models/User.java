@@ -21,11 +21,15 @@ import java.util.Set;
         ),
         @NamedQuery(
                 name = "User.getUserFromRequest",
-                query = "select u from User u where u.mail =:mail and u.password =:password"
+                query = "select u from User u where u.mail =:mail"
         ),
         @NamedQuery(
                 name = "User.updateUserToken",
                 query = "update User u set u.token =:token where u.id =:user_id"
+        ),
+        @NamedQuery(
+                name = "User.deleteUserFromMail",
+                query = "delete from User u where u.mail =:mail"
         )
 })
 

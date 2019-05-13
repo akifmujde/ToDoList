@@ -39,6 +39,10 @@ import java.util.Set;
                             "select di.tobeCompleted.id from DependencyItem di " +
                             "where di.stillWaiting.id =:still_waiting_id" +
                         ")"
+        ),
+        @NamedQuery(
+                name = "ToDoItem.getToDoItemsFromList_Id",
+                query = "select i from ToDoItem i where i.todoList.id =:list_id"
         )
 })
 @Data

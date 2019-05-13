@@ -9,8 +9,7 @@ import com.akifmuje.todolisttask.dto.responses.RegistrationResponse;
 import com.akifmuje.todolisttask.messages.BaseMessages;
 import com.akifmuje.todolisttask.models.User;
 import com.akifmuje.todolisttask.services.IUserService;
-import com.akifmuje.todolisttask.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Random;
@@ -19,8 +18,15 @@ import java.util.Random;
 @CrossOrigin
 public class UserController {
 
-    @Autowired
-    IUserService userService;
+    private final IUserService userService;
+
+    private BCryptPasswordEncoder encoder;
+
+    public UserController(IUserService userService){
+        this.userService = userService;
+        this.encoder = new BCryptPasswordEncoder();
+    }
+
 
     public String token_Generator(){
 
@@ -51,18 +57,23 @@ public class UserController {
         User user;
         LoginResponse loginResponse = new LoginResponse();
 
-        user = userService.getUserFromRequest(loginRequest.mail,loginRequest.password).stream().findFirst().orElse(null);
+        user = userService.getUserFromRequest(loginRequest.mail).stream().findFirst().orElse(null);
 
         if(user != null){
 
-            loginResponse.result = true;
-            loginResponse.message = "User was successfully login.";
+            if(this.encoder.matches(loginRequest.password,user.getPassword())){
+                loginResponse.result = true;
+                loginResponse.message = "User was successfully login.";
 
-            String token = token_Generator();
+                String token = token_Generator();
 
-            loginResponse.token = token;
-            userService.updateUserToken(token,user.getId());
-
+                loginResponse.token = token;
+                userService.updateUserToken(token,user.getId());
+            }
+            else{
+                loginResponse.result = false;
+                loginResponse.message = "Password is not correct";
+            }
         }
         else {
 
@@ -92,7 +103,7 @@ public class UserController {
                 userService.createUser(new User(
                         registrationRequest.name,
                         registrationRequest.mail,
-                        registrationRequest.password,
+                        this.encoder.encode(registrationRequest.password),
                         token
                 ));
 

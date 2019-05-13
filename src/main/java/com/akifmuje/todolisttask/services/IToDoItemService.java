@@ -20,6 +20,8 @@ public interface IToDoItemService {
 
     List<ToDoItem> getNotDependencyItems(@Param("still_waiting_id") int still_waiting_id);
 
+    List<ToDoItem> getToDoItemsFromList_Id(@Param("list_id") int list_id);
+
     void deleteItem(@Param("id") int id);
 
     void deleteListItems(@Param("list_id") int list_id);
