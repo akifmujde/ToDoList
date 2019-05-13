@@ -12,6 +12,7 @@ public interface ToDoListRepository extends JpaRepository<ToDoList,Integer> {
 
     List<ToDoList> getToDoLists(@Param("user_id") int user_id);
     List<ToDoList> getListFromId(@Param("id") int id);
+    List<ToDoList> getListFromMailAndName(@Param("name") String name, @Param("user_id") int user_id);
 
     @Modifying
     void deleteToDoList(@Param("id") int id);

@@ -1,6 +1,7 @@
 package com.akifmuje.todolisttask;
-
+import com.akifmuje.todolisttask.models.ToDoList;
 import com.akifmuje.todolisttask.models.User;
+import com.akifmuje.todolisttask.services.IToDoListService;
 import com.akifmuje.todolisttask.services.IUserService;
 import org.junit.After;
 import org.junit.Before;
@@ -14,14 +15,18 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserFindTest {
+public class CreateToDoList {
 
     @Autowired
     IUserService userService;
 
+    @Autowired
+    IToDoListService toDoListService;
+
     private BCryptPasswordEncoder encoder;
 
     User user;
+    ToDoList toDoList;
 
     @Before
     public void bef(){
@@ -30,28 +35,30 @@ public class UserFindTest {
         String name = "name";
         String mail = "mail@mail.com";
         String password = "password";
-        String token = "";
-
-        user = new User(name,mail,password,token);
+        String token = "test_token";
 
         userService.createUser(new User(name,mail, encoder.encode(password), token));
+
+        user = userService.findUserFromMail(mail).stream().findFirst().orElse(null);
 
     }
 
     @Test
-    public void find_user_test() {
+    public void create_to_do_list_test() {
 
-        User finduser = userService.findUserFromMail(user.getMail()).stream().findFirst().orElse(null);
+        String name = "list_name";
 
-        assertEquals(user.getMail(),finduser.getMail());
+        toDoListService.save(new ToDoList(name,user));
+
+        toDoList = toDoListService.getListFromMailAndName(name,user.getId()).stream().findFirst().orElse(null);
+
+        assertEquals(name,toDoList.getName());
 
     }
 
     @After
     public void aft(){
-        
+        toDoListService.deleteToDoList(toDoList.getId());
         userService.deleteUserFromMail(user.getMail());
-
     }
-
 }

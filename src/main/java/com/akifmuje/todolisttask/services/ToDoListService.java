@@ -28,6 +28,11 @@ public class ToDoListService implements IToDoListService{
         return repository.getListFromId(id);
     }
 
+    @Override
+    public List<ToDoList> getListFromMailAndName(String name, int user_id) {
+        return repository.getListFromMailAndName(name,user_id);
+    }
+
     @Transactional
     @Override
     public void deleteToDoList(int id) {

@@ -21,6 +21,10 @@ import java.util.Set;
         @NamedQuery(
                 name="ToDoList.getListFromId",
                 query = "select list from ToDoList list where list.id =:id"
+        ),
+        @NamedQuery(
+                name="ToDoList.getListFromMailAndName",
+                query = "select list from ToDoList list where list.name =:name and list.user.id =:user_id"
         )
 })
 @Data
