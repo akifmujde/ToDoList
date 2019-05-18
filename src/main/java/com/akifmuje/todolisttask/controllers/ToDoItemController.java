@@ -95,6 +95,7 @@ public class ToDoItemController {
 
                 com.akifmuje.todolisttask.dto.models.ToDoItem dto = new com.akifmuje.todolisttask.dto.models.ToDoItem();
 
+                dto.id = i.getId();
                 dto.name = i.getName();
                 dto.description = i.getDescription();
                 dto.deadline = i.getDeadline();
@@ -120,29 +121,52 @@ public class ToDoItemController {
 
     }
 
-/*
+
     // 3) Order to do item.
     @RequestMapping(value = "/orderitem",method = RequestMethod.POST)
     public @ResponseBody OrderListOfToDoItemResponse orderToDoItem(@RequestBody OrderListOfToDoItemRequest orderListOfToDoItemRequest){
-        List<ToDoItem> list = toDoItemService.orderToDoItem(orderListOfToDoItemRequest.list_id,orderListOfToDoItemRequest.column_name,orderListOfToDoItemRequest.order_type);
+
+        User user;
+        ToDoList toDoList;
+        List<ToDoItem> order_lists = toDoItemService.orderToDoItem(orderListOfToDoItemRequest.list_id,orderListOfToDoItemRequest.column_name,orderListOfToDoItemRequest.order_type);
+
+        user = userService.getUserFromToken(orderListOfToDoItemRequest.token).stream().findFirst().orElse(null);
+        toDoList = toDoListService.getListFromId(orderListOfToDoItemRequest.list_id).stream().findFirst().orElse(null);
+
         OrderListOfToDoItemResponse orderListOfToDoItemResponse = new OrderListOfToDoItemResponse();
+        BaseMessages baseMessages = new BaseMessages(user,toDoList);
 
-        for (ToDoItem t: list) {
-            com.akifmuje.todolisttask.dto.models.ToDoItem dto = new com.akifmuje.todolisttask.dto.models.ToDoItem();
+        if (baseMessages.result){
 
-            dto.name = t.getName();
-            dto.description = t.getDescription();
-            dto.deadline = t.getDeadline();
-            dto.created_date = t.getCreated_date();
-            dto.updated_date = t.getUpdated_date();
-            dto.list_id = t.getTodoList().getId();
-            dto.status_id = t.getStatus().getId();
+            for (ToDoItem order_item: order_lists) {
+                com.akifmuje.todolisttask.dto.models.ToDoItem dto = new com.akifmuje.todolisttask.dto.models.ToDoItem();
+
+                dto.id = order_item.getId();
+                dto.name = order_item.getName();
+                dto.description = order_item.getDescription();
+                dto.deadline = order_item.getDeadline();
+                dto.created_date = order_item.getCreated_date();
+                dto.updated_date = order_item.getUpdated_date();
+                dto.list_id = order_item.getTodoList().getId();
+                dto.status_id = order_item.getStatus().getId();
+
+                orderListOfToDoItemResponse.toDoItems.add(dto);
+
+            }
+
+            orderListOfToDoItemResponse.message = "List was successfully ordered.";
+            orderListOfToDoItemResponse.result = true;
+
         }
+        else {
 
+            orderListOfToDoItemResponse.message = baseMessages.message;
+            orderListOfToDoItemResponse.result = false;
+        }
 
         return orderListOfToDoItemResponse;
     }
-*/
+
 
 
     // 4) Delete list item.

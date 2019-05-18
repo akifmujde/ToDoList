@@ -5,6 +5,9 @@ import com.akifmuje.todolisttask.repositores.ToDoItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +17,9 @@ public class ToDoItemService implements IToDoItemService{
 
     @Autowired
     private ToDoItemRepository repository;
+
+    @PersistenceContext
+    EntityManager em;
 
     @Override
     public List<ToDoItem> getToDoItemFromId(int todo_item_id) { return repository.getToDoItemFromId(todo_item_id); }
@@ -36,6 +42,15 @@ public class ToDoItemService implements IToDoItemService{
     @Override
     public List<ToDoItem> gelAllDependenciesOfItem(int still_waiting_id) {
         return repository.gelAllDependenciesOfItem(still_waiting_id);
+    }
+
+    @Override
+    public List<ToDoItem> orderToDoItem(int list_id, String c_name, String order_type) {
+
+        String sqlQueryWithOrderBy = "select * from todo_item where todo_list_id = "+ list_id + " order by " + c_name + " " + order_type;
+        Query order = em.createNativeQuery(sqlQueryWithOrderBy,ToDoItem.class);
+
+        return order.getResultList();
     }
 
     @Transactional

@@ -16,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -147,20 +148,31 @@ public class ToDoListController {
 
         if (baseMessages.result == true){
 
-            toDoItemService.save(new ToDoItem(
-                    addListOfToDoItemRequest.name,
-                    addListOfToDoItemRequest.description,
-                    addListOfToDoItemRequest.deadline,
-                    toDoList,
-                    status
-            ));
+            if (addListOfToDoItemRequest.deadline.compareTo(new Date()) > 0){
 
-            addListOfToDoItemResponse.message = "To do item was successfully created";
+                toDoItemService.save(new ToDoItem(
+                        addListOfToDoItemRequest.name,
+                        addListOfToDoItemRequest.description,
+                        addListOfToDoItemRequest.deadline,
+                        toDoList,
+                        status
+                ));
+
+                addListOfToDoItemResponse.message = "To do item was successfully created";
+                addListOfToDoItemResponse.result = true;
+
+            }
+            else{
+
+                addListOfToDoItemResponse.message = "Deadline must be equal or after today.";
+                addListOfToDoItemResponse.result = false;
+            }
+
         }
         else {
             addListOfToDoItemResponse.message = baseMessages.message;
+            addListOfToDoItemResponse.result = false;
         }
-        addListOfToDoItemResponse.result = baseMessages.result;
 
         return addListOfToDoItemResponse;
     }

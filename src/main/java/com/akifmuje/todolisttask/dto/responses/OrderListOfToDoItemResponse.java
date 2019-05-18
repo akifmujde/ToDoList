@@ -9,8 +9,10 @@ import java.util.List;
 
 public class OrderListOfToDoItemResponse extends BaseResponse {
 
-    public List<ToDoItem> toDoItems = new ArrayList<>();
+    public List<ToDoItem> toDoItems;
 
-    public OrderListOfToDoItemResponse(){}
+    public OrderListOfToDoItemResponse(){
+        toDoItems = new ArrayList<>();
+    }
 
 }

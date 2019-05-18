@@ -24,6 +24,8 @@ public interface IToDoItemService {
 
     List<ToDoItem> gelAllDependenciesOfItem(@Param("still_waiting_id") int still_waiting_id);
 
+    List<ToDoItem> orderToDoItem(int list_id, String c_name, String order_type);
+
     void deleteItem(@Param("id") int id);
 
     void deleteListItems(@Param("list_id") int list_id);

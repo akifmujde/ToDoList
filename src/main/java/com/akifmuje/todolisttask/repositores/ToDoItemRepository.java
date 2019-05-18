@@ -21,6 +21,7 @@ public interface ToDoItemRepository extends JpaRepository<ToDoItem,Integer>{
     @Query(value = filterItem)
     List<ToDoItem> filterItem(int list_id, int status_id, String name);
 
+
     @Modifying
     void deleteListItems(@Param("list_id") int list_id);
 
