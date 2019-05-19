@@ -39,13 +39,13 @@ import javax.persistence.*;
                 query = "select di from DependencyItem di " +
                         "where " +
                         // user can not add a two way dependency
-                        "di.stillWaiting.id =:tobe_completed_id " +
+                        "(di.stillWaiting.id =:tobe_completed_id and di.tobeCompleted.id =:still_waiting_id) " +
                         "or" +
                         // user can not add a existing dependency
-                        "(di.stillWaiting.id =:still_waiting_id and di.tobeCompleted.id =:tobe_completed_id) " +
-                        "or" +
+                        "(di.stillWaiting.id =:still_waiting_id and di.tobeCompleted.id =:tobe_completed_id) "
+                        //"or" +
                         // user can not add a self dependency
-                        "(di.stillWaiting.id =:still_waiting_id and di.tobeCompleted.id =:still_waiting_id) "
+                        //"(di.stillWaiting.id =:still_waiting_id and di.tobeCompleted.id =:still_waiting_id) "
 
         ),
         @NamedQuery(
